@@ -2,6 +2,8 @@
 #of cyclic peptide gene og_10573; can be used for other orthologs
 #produce different input file
 
+#had to produce branch lengths for this to work to use ace
+
 library(ggplot2)
 library(ggtree)
 library(ape)
