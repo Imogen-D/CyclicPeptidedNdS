@@ -45,4 +45,10 @@ mv RAxML_b* ./orthodir/trees
 rm RAxML*
 done
 
+# 1. We use mafft to align proteins
+# 2. We use pal2nal to make codon-alignments in paml and fasta format
+# 3. We use RAXML to estimate a tree from the codons
+# 4. We use ete3 to automate paml dNdS analysis
+# 5. Finally, we do some bash hackery to add a row to a dNdS file
+# 6. Remove excess files
 
