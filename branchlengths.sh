@@ -1,14 +1,3 @@
-#with open('twentyorthos.tsv') as file:
-#   ...:     for line in file:
-#  ...:         ortholog_id = line.split()
-#    ...:         print(*ortholog_id)
-#    ...:         ortho = "".join([*ortholog_id, "_aligned.fna"])
-#    ...:         print(ortho)
-#    ...:         oldfile = "".join(["/home/imogen/BPRC/EpiAll/branchlengths/aligned/", ortho])
-#    ...:         newfile = "".join(["/home/imogen/BPRC/EpiAll/branchlengths/twentyalignments/", ortho])
-#    ...:         shutil.move(oldfile, newfile)
-
-
 #!/bin/bash
 
 
