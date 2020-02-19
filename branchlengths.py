@@ -1,3 +1,6 @@
+#Code to move aligned ortholog files corresponding to orthologs in subsetfull.tsv - all orthologs containing all species
+#Sets up directory to run branchlengths.sh
+
 import shutil
 
 with open('subsetfull.tsv') as file:
