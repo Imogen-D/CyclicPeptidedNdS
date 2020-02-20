@@ -1,6 +1,6 @@
 #Subsetting all orthologs for concatenate.py / making branch lengths
                           
-files <- which(Ntip(<all trees read into R>) == 24) #total number of strains
+files <- which(Ntip(<all trees read into R>) == 23) #total number of strains
 filepaths <- all_filepath_trees[files]
 og_nums_full <- str_extract(string = filepaths, pattern = "og_\\d+")
 
