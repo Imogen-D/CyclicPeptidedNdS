@@ -1,5 +1,4 @@
-#code to produce tree with ancestral state
-#of cyclic peptide gene og_10573; can be used for other orthologs
+#code to produce tree with ancestral state of ortholog presence
 #produce different input file
 
 #had to produce branch lengths for this to work to use ace
