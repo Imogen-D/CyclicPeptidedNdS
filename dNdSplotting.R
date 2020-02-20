@@ -1,7 +1,7 @@
 #code to plot dNdS values
 #dNdS made in ubuntu
 
-dNdS <- read.csv("~/CoxExtension/dNdS.csv", header=FALSE, stringsAsFactors=FALSE)
+dNdS <- read.csv("<dNdS.tsv>", header=FALSE, stringsAsFactors=FALSE)
 dNdS <- dNdS[-1,]
 colnames(dNdS) <- c("ortholog", "dNdS_values")
 
