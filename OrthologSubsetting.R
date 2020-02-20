@@ -1,20 +1,28 @@
+# 
+# We require two different subsets of genes, one for all CP-associated 
+# lcoi and another for all gene-trees that 
+#
+
 #to be used to isolate ortholog involved in subset
 #where ortholog id's match that of file supplied
 #are subsetted from full ortholog id file
 
-ortho_long <- read.delim("<ortho_long.tsv>", header=FALSE, stringsAsFactors=FALSE)
-pa <- read.delim("<presence of ortholog files.csv>", header=FALSE, stringsAsFactors=FALSE) #pa.csv
-CPorthos <- unique(pa$V1)
 
-ortho_long_rows <- lapply(CPorthos, function(x) which(ortho_long$V1 == (x)))
-rownums <- unlist(ortho_long_rows)
-subsetorthos <- ortho_long[(rownums),]
+ortho_long <- read.delim("ortho_long.tsv", header=FALSE, stringsAsFactors=FALSE)
+pa <- read.delim("pa.scv", header=FALSE, stringsAsFactors=FALSE) #pa.csv
+to_keep <- unique(pa$V1)
+CP_orthos <- subset(all_orthos, V1 %in% to_keep)
 
-write.table(subsetorthos, file = "subsetCP.tsv", row.names = FALSE, col.names = FALSE, quote = FALSE)
+subsetorthos <- subset_ortholog(ortho_long, "pa.csv")
+
+write.table(CP_orthos, file = "subsetCP.tsv", row.names = FALSE, col.names = FALSE, quote = FALSE)
 
 
 #this tsv then used to produce dNdS values
 
+#########################################
+# Probably move this to another script  #
+#########################################
 
 #Subsetting all orthologs for concatenate.py / making branch lengths
                           
