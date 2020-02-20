@@ -2,9 +2,9 @@
 #where ortholog id's match that of file supplied
 #are subsetted from full ortholog id file
 
-ortho_long <- read.delim("~/CoxExtension/ortho_long.tsv", header=FALSE, stringsAsFactors=FALSE)
-CPTrueFalse <- read.delim("~/CoxExtension/CPTrueFalse.csv", header=FALSE, stringsAsFactors=FALSE)
-CPorthos <- unique(CPTrueFalse$V1)
+ortho_long <- read.delim("<ortho_long.tsv>", header=FALSE, stringsAsFactors=FALSE)
+pa <- read.delim("<presence of ortholog files.csv", header=FALSE, stringsAsFactors=FALSE) #pa.csv
+CPorthos <- unique(pa$V1)
 
 ortho_long_rows <- lapply(CPorthos, function(x) which(ortho_long$V1 == (x)))
 rownums <- unlist(ortho_long_rows)
