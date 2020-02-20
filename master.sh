@@ -4,8 +4,8 @@ mkdir ./genes
 mkdir ./proteins
 mkdir ./orthodir
 
-python3 geneorthologs.py subsetCP.tsv seq_map.tsv 1 ./genes/
-python3 protorthologs.py subsetCP.tsv prot_seq_map.tsv 1 ./proteins/
+python3 <geneorthologs.py> <subsetCP.tsv> <seq_map.tsv> 1 ./genes/
+python3 <protorthologs.py> <subsetCP.tsv> <prot_seq_map.tsv> 1 ./proteins/
 
 #arguments for above; ortho_subset, seq_files, minimum species, outdir
 
