@@ -1,0 +1,116 @@
+---
+title: "CyclicPeptidedNdS"
+author: "Imogen Dumville"
+date: "21/02/2020"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Ortho_long files are split into three columns; ortholog id, gene code and strain code.
+```{r orth_long, echo = FALSE}
+ortho_long <- read.table("ortho_long.tsv")
+print(ortho_long[1:6,])
+```
+
+This file is subsetted with the aid of a file containing orthologs pertaining to a group of genes. In this case, orthologs relating to cyclic peptide production.
+
+```{r subsetting}
+pa <- read.delim("pa.csv", header=FALSE, stringsAsFactors=FALSE) #pa.csv
+to_keep <- unique(pa$V1)
+CP_orthos <- subset(ortho_long, V1 %in% to_keep)
+
+write.table(CP_orthos, file = "subsetCP.tsv", row.names = FALSE, col.names = FALSE, quote = FALSE)
+```
+```{r head subset, echo = FALSE}
+subset <- read.csv(file = "subsetCP.tsv")
+head(subset)
+```
+
+This subset file is then used in shell. Utilising two python scripts to isolate proteins and nucleotide files (geneorthologs.py & protorthologs.py in master.sh), dNdS.tsv is created.
+```{r dNdS}
+dNdS <- read.csv(file = "dNdS.tsv")
+head(dNdS)
+```
+
+dNdS above 0.4 or alignments with more than 15 strains are further analysed. Orthlog sequence files (as isolated by the subset file) are uploaded and anlysed in DataMonkey Meme to observe selection processes. Low p values are further analysed.InterProScan is used to observe domains.
+Results are observed in a qualitative fashion in dNdSIII.csv.
+
+
+dNdS results are plotted, after empty dNdS values removed (dNdS.tsv converted to csv) (dNdsplotting.R)
+```{r dNdS plot, warning=FALSE}
+dNdS <- read.csv("dNdS.csv", header=FALSE, stringsAsFactors=FALSE)
+dNdS <- dNdS[(2:19), c(1,2)]
+colnames(dNdS) <- c("ortholog", "dNdS_values")
+dNdS$dNdS_values <- as.numeric(as.character(dNdS$dNdS_values))
+library(ggplot2)
+plot <- ggplot(dNdS, aes(dNdS_values, ortholog)) + geom_point(aes(fill=dNdS_values), colour="black", pch=21)
+plot + scale_fill_continuous(low = "cadetblue1", high = "deepskyblue4")
+```
+
+For ancestral state reconstruction, an ASTRAL - produced strain-containing tree must have branch lengths appended to it.
+To create branchlengths, a subset of all orthologs containing all 24 strains is produced. This is produced in list form
+```{r subsetall}
+library(ape)
+library(stringr)
+
+all_filepath_trees <- list.files("TreeswCpur/", full.names = TRUE)
+all_full_trees <- read.tree("all_full_trees.phy") 
+
+files = which(Ntip(all_full_trees) == 23) #total number of strains
+filepaths <- all_filepath_trees[files]
+og_nums_full <- str_extract(string = filepaths, pattern = "og_\\d+")
+
+
+ortho_full_rows <- lapply(og_nums_full, function(x) which(ortho_long$V1 == (x)))
+rownums <- unlist(ortho_full_rows)
+subsetorthos <- ortho_long[(rownums),]
+
+full <- unique(subsetorthos$V1)
+write.table(full, file = "subsetfull.tsv", row.names = FALSE, col.names = FALSE, quote = FALSE)
+head(full)
+```
+
+concatenate.py is then ran to produce a RAxML tree with branch lengths. This is then reimported back into R and ancestral state reconstruction can be carried out.
+In this example, the presence of og_10573 is analysed
+```{R ace}
+library(tidyr)
+branchtree <- read.tree(file = "RAxML_result.fullbranchlengthstree") #produced by concatenate.py
+rooted_branchtree <- root(branchtree, "CCE27021")
+droppedtip <- drop.tip(rooted_branchtree, "CCE27021")
+plot(droppedtip)
+axisPhylo() #observe tree
+
+
+pa <- read.delim("pa.csv", header=FALSE, stringsAsFactors=FALSE) #pa.csv
+#CSV describing presence of orthologs
+
+paspread <- spread(pa, V1, V3)
+rownames(paspread) <- paspread$V2
+paspread$V2 <- NULL
+
+og_10573 <- paspread[,'og_10573', drop = FALSE] #test og
+matrixog <- as.matrix(og_10573)[,1]
+
+chronos_relative <- makeChronosCalib(droppedtip, node = "root", age.min = 1, age.max = 1, interactive = FALSE, soft.bounds = FALSE) 
+chronos_relative #pretending to add chronos / how to add to tree?
+
+Q <- matrix( c(0,1,2,0) , nrow=2)
+ancestral <- ace(matrixog, droppedtip, type = "discrete", model = Q)
+#had to produce matrix for all rates different model manually as ARD had errors
+margancesstates <- round(ancestral$lik.anc,2)
+
+nodelabels(node=1:droppedtip$Nnode+Ntip(droppedtip), pie=ancestral$lik.anc,cex=0.5)
+
+legend("bottomright", legend = c("Present", "Absent"), fill = c("Cyan", "Red"), cex = 0.75)
+title(main = "Ancestral presence of cyclic peptide og_10573", xlab = "Branchlength")
+```
+
+
+
