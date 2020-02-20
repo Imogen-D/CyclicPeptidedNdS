@@ -9,12 +9,9 @@
 
 
 ortho_long <- read.delim("ortho_long.tsv", header=FALSE, stringsAsFactors=FALSE)
-pa <- read.delim("pa.scv", header=FALSE, stringsAsFactors=FALSE) #pa.csv
+pa <- read.delim("pa.csv", header=FALSE, stringsAsFactors=FALSE) #pa.csv
 to_keep <- unique(pa$V1)
-CP_orthos <- subset(all_orthos, V1 %in% to_keep)
-
-subsetorthos <- subset_ortholog(ortho_long, "pa.csv")
-
+CP_orthos <- subset(ortho_long, V1 %in% to_keep)
 write.table(CP_orthos, file = "subsetCP.tsv", row.names = FALSE, col.names = FALSE, quote = FALSE)
 
 
