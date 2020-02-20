@@ -1,7 +1,7 @@
 # CyclicPeptide Analysis
 Repository to calculate dNdS for cyclic peptide associated orthologs, create branchlengths for species trees, and do ancestral state reconstruction
 
-## Steps require for analysis.
+## Getting a subset of orthology data
 
 As we want to focus only on othologous groups with likely cyclic peptide
 domains, our first step is to subset the whole-genome orthology informatoin down
