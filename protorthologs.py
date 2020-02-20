@@ -87,13 +87,5 @@ if __name__ == "__main__":
 	for ortho_name, seqs in O.all_orthos(args.min_species):
 		out_name = "{}{}_proteins.fna".format(args.out_dir, ortho_name)
 		n = SeqIO.write(seqs, out_name, "fasta")
-#		if n < 2:
-#			print("{} has only {} seqs?".format(ortho_name, n))
-#			sys.exit()	
-	
-
-#currently only getting species with retrieve seqs using one ortho group
-#making fasta files for all orthos
-#only using one fasta file in master script
 
 
