@@ -5,22 +5,23 @@ import os
 import shutil
 
 #Code to move aligned ortholog files corresponding to orthologs in subsetfull.tsv - all orthologs containing all species
+#subset full produced in orthologsubsetting.R
 
-with open('subsetfull.tsv') as file:
+with open('<subsetfull.tsv>') as file: #file with ortholog numbers for all full trees
 	for line in file:
 		ortholog_id = line.split()
 		print(*ortholog_id)
 		ortho = "".join([*ortholog_id, "_aligned.fna"])
 		print(ortho)
-		oldfile = "".join(["/home/imogen/BPRC/EpiAll/aligned/", ortho])
-		newfile = "".join(["/home/imogen/BPRC/EpiAll/branchlengths/fullalignments/", ortho])
+		oldfile = "".join(["<directory of alignments>", ortho])
+		newfile = "".join(["<new working directory>", ortho])
 		shutil.move(oldfile, newfile)
 		
-#remove one alignment from this ./fullalignments to use as extension file in next part of script. In this example: 0g_0178
+#remove one alignment from this ./fullalignments to use as extension file in next part of script.
 
-directory = "/home/imogen/BPRC/EpiAll/branchlengths/fullalignments"
-recs = SeqIO.to_dict(SeqIO.parse("og_0178_aligned.fna", "fasta"))
-print(len(recs["C2857"]))
+directory = "<new working directory>"
+recs = SeqIO.to_dict(SeqIO.parse("<alignment to extend>", "fasta"))
+print(len(recs["C2857"])) #test that start length is as expected
 for file in os.listdir(directory):
 	new_r = SeqIO.parse(file, "fasta")      
 	for r in new_r:                                                  
