@@ -1,4 +1,4 @@
-#code to concatenate each strain's orthologs
+#code to concatenate each strain's orthologs and produce strain tree with branch lengths
 
 from Bio import SeqIO
 import os
@@ -30,6 +30,6 @@ print(len(recs["C2857"])) #test that output is longer than beginning by reasonab
 
 SeqIO.write(recs.values(), "concatenated.fna", "fasta")                                          
                                 
-#raxmlHPC -s ./fullalignments/concatenated.fna -m GTRGAMMA -p 10 -n  fullbranchlengthstree -f e -t ~/windowshare/straintree 
+#raxmlHPC -s <concatenated.fna> -m GTRGAMMA -p 10 -n  fullbranchlengthstree -f e -t <strain tree>
 #Use last line to add branch lengths to inputted straintree as produced in different repository: https://github.com/Imogen-D/EpichloeSpeciesTreeProject
 
